@@ -7,13 +7,14 @@
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Postgres-3ecf8e?style=flat&logo=supabase)](https://supabase.com/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-fe5196?style=flat&logo=conventionalcommits)](https://www.conventionalcommits.org/)
 
-Aplicação web completa para controle de finanças pessoais, projetada com foco em alta performance, privacidade rigorosa de dados e experiência do usuário (UX) premium.
+Aplicação web completa para controle de finanças pessoais, projetada com foco em alta performance, privacidade rigorosa de dados e experiência do usuário (UX) premium com suporte nativo a **Português (BR)** e moeda **Real (R$)**.
 
 ---
 
 ## 📑 Sumário
 
 - [Visão Geral e Arquitetura](#-visão-geral-e-arquitetura)
+- [Demonstração Visual & Passo a Passo das Telas](#-demonstração-visual--passo-a-passo-das-telas)
 - [Recursos Principais](#-recursos-principais)
 - [Stack Tecnológica](#-stack-tecnológica)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
@@ -36,6 +37,89 @@ graph TD
     SupabaseSSR -- PostgreSQL e Row Level Security --> Postgres[(Supabase Database)]
     NextServer -- UI Interativa e Charts --> UI[Recharts e Tailwind CSS v4]
 ```
+
+---
+
+## 📸 Demonstração Visual & Passo a Passo das Telas
+
+Conheça cada etapa da jornada do usuário pela aplicação com os prints e suas respectivas funcionalidades:
+
+---
+
+### Passo 1: Página Inicial & Apresentação (Landing Page)
+> **Rota:** `/`
+
+![Página Inicial](docs/images/01-landing-page.png)
+
+- **Apresentação e Identidade Visual**: Recepção do usuário com tema dark sofisticado, efeitos de *glassmorphism* e iluminação ambiente em tons índigo e esmeralda.
+- **Chamadas de Ação (CTAs)**: Botões rápidos para "Começar Agora" (cadastro imediato) e "Ver Demonstração" (navegação direta pelo dashboard).
+- **Cards de Destaque**: Resumo das propostas de valor do sistema (Orçamentos Inteligentes, Dashboards em Tempo Real e Segurança Row Level Security).
+
+---
+
+### Passo 2: Autenticação Segura (Login & Cadastro)
+> **Rotas:** `/login` e `/register`
+
+![Autenticação](docs/images/02-autenticacao.png)
+
+- **Acesso por E-mail e Senha**: Formulário seguro com validação estrita no servidor através do Zod.
+- **Feedback Instantâneo**: Tratamento amigável de credenciais incorretas ou campos vazios.
+- **Sessão Persistente via SSR**: Cookies HTTP seguros gerenciados pelo `@supabase/ssr` e sincronizados via middleware.
+- **Auto-Provisionamento no Cadastro**: O novo usuário recebe automaticamente uma Conta Corrente inicial e 12 categorias financeiras padrão via trigger PostgreSQL.
+
+---
+
+### Passo 3: Painel Central (Dashboard Analítico)
+> **Rota:** `/dashboard`
+
+![Dashboard](docs/images/03-dashboard.png)
+
+- **Métricas Chave (KPIs)**:
+  - **Saldo Consolidado**: Soma em tempo real de todas as contas cadastradas.
+  - **Receitas do Mês**: Total de entradas acumuladas no mês corrente.
+  - **Despesas do Mês**: Total de saídas computadas no período.
+  - **Economia Líquida**: Superávit ou déficit mensal calculado dinamicamente.
+- **Gráficos Interativos (Recharts)**:
+  - *Fluxo dos Últimos 6 Meses*: Comparativo em barras entre entradas (verde) e saídas (vermelho).
+  - *Despesas por Categoria*: Gráfico Donut proporcional exibindo a distribuição dos gastos.
+- **Ações Rápidas**: Botão de modal para lançamento imediato de transações e exportação de extrato em CSV.
+
+---
+
+### Passo 4: Extrato Completo de Transações & Filtros
+> **Rota:** `/transactions`
+
+![Transações](docs/images/04-transacoes.png)
+
+- **Busca em Tempo Real**: Filtro instantâneo por texto na descrição das movimentações.
+- **Filtros Combinados**: Filtragem simultânea por Tipo (Receita/Despesa), Categoria e Conta Bancária.
+- **Detalhamento das Linhas**: Identificação por ícones coloridos, categorização com badges, data formatada no padrão brasileiro (`DD/MM/AAAA`) e valor monetário formatado em BRL (`R$`).
+- **Exclusão Segura**: Remoção individual de lançamentos com revalidação automática das telas.
+
+---
+
+### Passo 5: Orçamentos Mensais com Alertas de Gastos
+> **Rota:** `/budgets`
+
+![Orçamentos](docs/images/05-orcamentos.png)
+
+- **Tetos de Gastos por Categoria**: Definição de limites mensais para evitar gastos excessivos.
+- **Medidores Visuais Dinâmicos**: Barras de progresso com coloração inteligente conforme o consumo do limite:
+  - 🟢 **Dentro da Meta**: Consumo abaixo de 80% do valor estipulado.
+  - 🟡 **Atenção (>80%)**: Alerta preventivo com aviso em amarelo ao se aproximar do teto.
+  - 🔴 **Limite Estourado (100%+)**: Destaque visual em vermelho sinalizando orçamento ultrapassado e saldo excedente.
+- **Modal de Ajuste**: Criação e atualização facilitada de metas para qualquer mês.
+
+---
+
+### Passo 6: Contas Bancárias & Carteiras
+> **Rota:** `/accounts`
+
+![Contas](docs/images/06-contas.png)
+
+- **Múltiplos Tipos de Contas**: Suporte a Conta Corrente, Poupança/Reserva de Emergência, Cartão de Crédito, Dinheiro em Espécie e Investimentos.
+- **Saldos Individuais**: Visualização do saldo disponível atualizado em cada instituição financeira.
+- **Personalização Visual**: Cores customizáveis em hexadecimal e ícones temáticos para identificação visual ágil.
 
 ---
 
@@ -73,6 +157,8 @@ graph TD
 
 ```
 app-orcamento-pessoal/
+├── docs/
+│   └── images/                             # Capturas de tela e demonstrações visuais
 ├── supabase/
 │   ├── migrations/
 │   │   ├── 001_schema_and_rls.sql          # Tabelas, índices e políticas RLS
@@ -81,10 +167,16 @@ app-orcamento-pessoal/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/                         # Rotas públicas de login e registro
-│   │   ├── (dashboard)/                    # Rotas protegidas (Dashboard, Transações, etc.)
+│   │   ├── (dashboard)/                    # Rotas protegidas com layout do painel
+│   │   │   ├── dashboard/page.tsx          # Painel principal analítico
+│   │   │   ├── transactions/page.tsx       # Extrato completo e filtros
+│   │   │   ├── budgets/page.tsx            # Limites e orçamentos mensais
+│   │   │   ├── accounts/page.tsx           # Contas bancárias e carteiras
+│   │   │   ├── categories/page.tsx         # Classificação de categorias
+│   │   │   └── goals/page.tsx              # Metas financeiras de economia
 │   │   ├── api/export-csv/                 # Endpoint de exportação CSV
 │   │   ├── globals.css                     # Design tokens e variáveis de tema
-│   │   └── layout.tsx                      # Layout raiz da aplicação
+│   │   └── layout.tsx                      # Layout raiz da aplicação (pt-BR)
 │   ├── components/
 │   │   ├── ui/                             # Button, Input, Modal, Card, Badge, Skeleton
 │   │   ├── layout/                         # Sidebar, Topbar, MobileNav
