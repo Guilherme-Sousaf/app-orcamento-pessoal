@@ -4,313 +4,321 @@
 [![React](https://img.shields.io/badge/React-19.3-blue?style=flat&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Postgres-3ecf8e?style=flat&logo=supabase)](https://supabase.com/)
-[![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-fe5196?style=flat&logo=conventionalcommits)](https://www.conventionalcommits.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-Banco%20%26%20Autentica%C3%A7%C3%A3o-3ecf8e?style=flat&logo=supabase)](https://supabase.com/)
+[![Commits Padronizados](https://img.shields.io/badge/Commits-Padronizados-fe5196?style=flat&logo=conventionalcommits)](https://www.conventionalcommits.org/pt-br/)
 
-Aplicação web completa para controle de finanças pessoais, projetada com foco em alta performance, privacidade rigorosa de dados e experiência do usuário (UX) premium com suporte nativo a **Português (BR)** e moeda **Real (R$)**.
+O **Orça+** é uma aplicação web completa e segura para controle e planejamento financeiro pessoal, projetada com foco em alto desempenho, proteção rigorosa de dados e uma experiência visual moderna (tema escuro, efeitos visuais translúcidos e micro-animações). O projeto foi desenvolvido inteiramente em **Português do Brasil (pt-BR)** com valores expressos em **Reais (R$)**.
 
 ---
 
 ## 📑 Sumário
 
 - [Visão Geral e Arquitetura](#-visão-geral-e-arquitetura)
-- [Demonstração Visual & Passo a Passo das Telas](#-demonstração-visual--passo-a-passo-das-telas)
-- [Recursos Principais](#-recursos-principais)
-- [Stack Tecnológica](#-stack-tecnológica)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Instalação e Execução Local](#-instalação-e-execução-local)
-- [Configuração do Banco de Dados (Supabase)](#-configuração-do-banco-de-dados-supabase)
-- [Estratégia de Branches (Git Flow)](#-estratégia-de-branches-git-flow)
-- [Padrão de Commits (Conventional Commits)](#-padrão-de-commits-conventional-commits)
-- [Segurança & Proteção de Dados](#-segurança--proteção-de-dados)
+- [Demonstração Visual e Passo a Passo das Telas](#-demonstração-visual-e-passo-a-passo-das-telas)
+- [Recursos Principais do Sistema](#-recursos-principais-do-sistema)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Estrutura de Pastas do Projeto](#-estrutura-de-pastas-do-projeto)
+- [Instalação e Execução Local Passo a Passo](#-instalação-e-execução-local-passo-a-passo)
+- [Configuração do Banco de Dados no Supabase](#-configuração-do-banco-de-dados-no-supabase)
+- [Estratégia de Ramificações no Git (Git Flow)](#-estratégia-de-ramificações-no-git-git-flow)
+- [Padrão de Mensagens de Commit (Conventional Commits)](#-padrão-de-mensagens-de-commit-conventional-commits)
+- [Segurança e Proteção de Dados](#-segurança-e-proteção-de-dados)
+- [Licença](#-licença)
 
 ---
 
 ## 🏛️ Visão Geral e Arquitetura
 
-O **Orça+** adota a arquitetura moderna do **Next.js App Router** com **Server Components** para leitura otimizada e **Server Actions** com validação no servidor via **Zod**. A camada de persistência utiliza **Supabase PostgreSQL** com isolamento integral através de **Row Level Security (RLS)**.
+O sistema adota a arquitetura de ponta do **Next.js App Router** com **Componentes de Servidor (Server Components)** para carregamento ultrarrápido de dados e **Ações de Servidor (Server Actions)** seguras com validação de dados via **Zod**.
+
+O banco de dados relacional **PostgreSQL** é hospedado no **Supabase** e protegido por **Segurança em Nível de Linha (Row Level Security - RLS)** em 100% das tabelas, garantindo que nenhum usuário tenha acesso aos lançamentos financeiros de outra pessoa.
 
 ```mermaid
 graph TD
-    Client([Usuário / Browser]) -- HTTPS / Cookies SSR --> NextServer[Next.js 16 Server]
-    NextServer -- Server Components & Actions --> SupabaseSSR[Supabase SSR Auth e RLS]
-    SupabaseSSR -- PostgreSQL e Row Level Security --> Postgres[(Supabase Database)]
-    NextServer -- UI Interativa e Charts --> UI[Recharts e Tailwind CSS v4]
+    Cliente([Usuário / Navegador Web]) -- Requisições HTTP e Cookies de Sessão --> ServidorNext[Servidor Next.js 16]
+    ServidorNext -- Componentes e Ações de Servidor --> ModuloSupabase[Supabase SSR Autenticação e RLS]
+    ModuloSupabase -- PostgreSQL com Segurança em Nível de Linha --> BancoSupabase[(Banco de Dados PostgreSQL)]
+    ServidorNext -- Interface Interativa e Gráficos --> InterfaceUsuario[Gráficos Recharts e Tailwind CSS v4]
 ```
 
 ---
 
-## 📸 Demonstração Visual & Passo a Passo das Telas
+## 📸 Demonstração Visual e Passo a Passo das Telas
 
-Conheça cada etapa da jornada do usuário pela aplicação com os prints e suas respectivas funcionalidades:
+Abaixo está o guia visual detalhado que ilustra o fluxo completo de utilização da aplicação:
 
 ---
 
-### Passo 1: Página Inicial & Apresentação (Landing Page)
-> **Rota:** `/`
+### Passo 1: Página Inicial de Apresentação (Landing Page)
+> **Rota no navegador:** `/`
 
 ![Página Inicial](docs/images/01-landing-page.png)
 
-- **Apresentação e Identidade Visual**: Recepção do usuário com tema dark sofisticado, efeitos de *glassmorphism* e iluminação ambiente em tons índigo e esmeralda.
-- **Chamadas de Ação (CTAs)**: Botões rápidos para "Começar Agora" (cadastro imediato) e "Ver Demonstração" (navegação direta pelo dashboard).
-- **Cards de Destaque**: Resumo das propostas de valor do sistema (Orçamentos Inteligentes, Dashboards em Tempo Real e Segurança Row Level Security).
+- **Boas-Vindas e Apresentação Visual**: Recepção do visitante com tema escuro e iluminação ambiente em tons de azul-índigo e verde-esmeralda.
+- **Botões de Ação Direta**:
+  - **"Começar Agora"**: Direciona o novo usuário para o formulário de cadastro gratuito.
+  - **"Ver Demonstração"**: Leva diretamente ao painel analítico da plataforma.
+- **Cartões de Destaque**: Resumo das três principais propostas de valor do sistema: Orçamentos Inteligentes, Painéis em Tempo Real e Proteção de Dados em Nível de Linha.
 
 ---
 
-### Passo 2: Autenticação Segura (Login & Cadastro)
-> **Rotas:** `/login` e `/register`
+### Passo 2: Autenticação Segura (Login e Cadastro)
+> **Rotas no navegador:** `/login` e `/register`
 
-![Autenticação](docs/images/02-autenticacao.png)
+![Tela de Autenticação](docs/images/02-autenticacao.png)
 
-- **Acesso por E-mail e Senha**: Formulário seguro com validação estrita no servidor através do Zod.
-- **Feedback Instantâneo**: Tratamento amigável de credenciais incorretas ou campos vazios.
-- **Sessão Persistente via SSR**: Cookies HTTP seguros gerenciados pelo `@supabase/ssr` e sincronizados via middleware.
-- **Auto-Provisionamento no Cadastro**: O novo usuário recebe automaticamente uma Conta Corrente inicial e 12 categorias financeiras padrão via trigger PostgreSQL.
-
----
-
-### Passo 3: Painel Central (Dashboard Analítico)
-> **Rota:** `/dashboard`
-
-![Dashboard](docs/images/03-dashboard.png)
-
-- **Métricas Chave (KPIs)**:
-  - **Saldo Consolidado**: Soma em tempo real de todas as contas cadastradas.
-  - **Receitas do Mês**: Total de entradas acumuladas no mês corrente.
-  - **Despesas do Mês**: Total de saídas computadas no período.
-  - **Economia Líquida**: Superávit ou déficit mensal calculado dinamicamente.
-- **Gráficos Interativos (Recharts)**:
-  - *Fluxo dos Últimos 6 Meses*: Comparativo em barras entre entradas (verde) e saídas (vermelho).
-  - *Despesas por Categoria*: Gráfico Donut proporcional exibindo a distribuição dos gastos.
-- **Ações Rápidas**: Botão de modal para lançamento imediato de transações e exportação de extrato em CSV.
+- **Acesso com E-mail e Senha**: Formulário protegido com validação de formato e comprimento de campos pelo Zod.
+- **Mensagens Claras de Alerta**: Avisos instantâneos e objetivos em caso de senha incorreta ou campos não preenchidos.
+- **Sessão Persistente via Cookies**: O login é mantido de forma segura pelo navegador utilizando cookies transmitidos via cabeçalhos HTTP pelo servidor.
+- **Criação Automática de Dados Iniciais**: Ao concluir o cadastro, o banco de dados executa um gatilho automático que cria o perfil, uma "Conta Principal" e 12 categorias financeiras padrão para o usuário já começar utilizando o sistema imediatamente.
 
 ---
 
-### Passo 4: Extrato Completo de Transações & Filtros
-> **Rota:** `/transactions`
+### Passo 3: Painel Principal (Dashboard Analítico)
+> **Rota no navegador:** `/dashboard`
 
-![Transações](docs/images/04-transacoes.png)
+![Painel Principal](docs/images/03-dashboard.png)
 
-- **Busca em Tempo Real**: Filtro instantâneo por texto na descrição das movimentações.
-- **Filtros Combinados**: Filtragem simultânea por Tipo (Receita/Despesa), Categoria e Conta Bancária.
-- **Detalhamento das Linhas**: Identificação por ícones coloridos, categorização com badges, data formatada no padrão brasileiro (`DD/MM/AAAA`) e valor monetário formatado em BRL (`R$`).
-- **Exclusão Segura**: Remoção individual de lançamentos com revalidação automática das telas.
+- **Indicadores Financeiros Principais (KPIs)**:
+  - **Saldo Consolidado**: Soma em tempo real do patrimônio líquido distribuído entre todas as contas.
+  - **Receitas do Mês**: Total acumulado de entradas monetárias no mês atual.
+  - **Despesas do Mês**: Total de saídas computadas no mês.
+  - **Economia Líquida**: Saldo positivo (superávit) ou negativo (déficit) gerado no período.
+- **Gráficos Analíticos Dinâmicos**:
+  - *Fluxo dos Últimos 6 Meses*: Comparação mensal em barras entre total de receitas (verde) e total de despesas (vermelho).
+  - *Despesas por Categoria*: Gráfico de rosca colorido ilustrando a proporção de gastos em cada categoria.
+- **Ações Rápidas do Cabeçalho**:
+  - Botão **"Nova Transação"**: Abre uma janela flutuante para cadastrar receitas e despesas sem sair da tela.
+  - Botão **"Exportar CSV"**: Baixa instantaneamente uma planilha com todos os lançamentos.
+
+---
+
+### Passo 4: Extrato Completo de Transações e Filtros
+> **Rota no navegador:** `/transactions`
+
+![Extrato de Transações](docs/images/04-transacoes.png)
+
+- **Busca por Texto em Tempo Real**: Campo de pesquisa rápida que filtra instantaneamente as transações pelo nome da descrição.
+- **Filtros Simultâneos**: Seleção refinada por Tipo (Todas, Apenas Receitas ou Apenas Despesas), Categoria e Conta Bancária.
+- **Estrutura da Tabela**:
+  - Identificação por ícones indicativos de entrada ou saída.
+  - Etiquetas coloridas com o nome da categoria.
+  - Formatação da data no padrão brasileiro (`DD/MM/AAAA`).
+  - Formatação monetária em Reais (`+ R$ 6.500,00` em verde ou `- R$ 450,80` em vermelho).
+- **Exclusão de Lançamento**: Botão com confirmação para apagar transações incorretas e recalcular saldos imediatamente.
 
 ---
 
 ### Passo 5: Orçamentos Mensais com Alertas de Gastos
-> **Rota:** `/budgets`
+> **Rota no navegador:** `/budgets`
 
-![Orçamentos](docs/images/05-orcamentos.png)
+![Orçamentos Mensais](docs/images/05-orcamentos.png)
 
-- **Tetos de Gastos por Categoria**: Definição de limites mensais para evitar gastos excessivos.
-- **Medidores Visuais Dinâmicos**: Barras de progresso com coloração inteligente conforme o consumo do limite:
-  - 🟢 **Dentro da Meta**: Consumo abaixo de 80% do valor estipulado.
-  - 🟡 **Atenção (>80%)**: Alerta preventivo com aviso em amarelo ao se aproximar do teto.
-  - 🔴 **Limite Estourado (100%+)**: Destaque visual em vermelho sinalizando orçamento ultrapassado e saldo excedente.
-- **Modal de Ajuste**: Criação e atualização facilitada de metas para qualquer mês.
-
----
-
-### Passo 6: Contas Bancárias & Carteiras
-> **Rota:** `/accounts`
-
-![Contas](docs/images/06-contas.png)
-
-- **Múltiplos Tipos de Contas**: Suporte a Conta Corrente, Poupança/Reserva de Emergência, Cartão de Crédito, Dinheiro em Espécie e Investimentos.
-- **Saldos Individuais**: Visualização do saldo disponível atualizado em cada instituição financeira.
-- **Personalização Visual**: Cores customizáveis em hexadecimal e ícones temáticos para identificação visual ágil.
+- **Definição de Tetos por Categoria**: Estabelecimento do valor máximo que o usuário pretende gastar em Alimentação, Moradia, Lazer, etc.
+- **Barras de Progresso Inteligentes com Alertas Visuais**:
+  - 🟢 **Dentro da Meta**: Consumo abaixo de 80% do teto mensal (etiqueta verde indicando controle financeiro saudável).
+  - 🟡 **Atenção (>80%)**: Alerta preventivo com barra em amarelo quando os gastos se aproximam do limite estabelecido.
+  - 🔴 **Limite Estourado (100%+)**: Destaque de alerta em vermelho informando que o orçamento foi ultrapassado e exibindo o montante excedido.
+- **Criação de Novos Orçamentos**: Janela modal para estipular o limite máximo para qualquer categoria e mês do ano.
 
 ---
 
-## ✨ Recursos Principais
+### Passo 6: Contas Bancárias e Carteiras
+> **Rota no navegador:** `/accounts`
 
-- 📊 **Dashboard Consolidado**: Saldo total em tempo real, receitas do mês, despesas do mês e economia líquida.
-- 📈 **Gráficos Analíticos com Recharts**:
-  - Comparativo de fluxo mensal (Receitas x Despesas) dos últimos 6 meses.
-  - Gráfico Donut de distribuição proporcional de gastos por categoria.
-- 💳 **Gestão de Contas & Carteiras**: Saldos independentes para Conta Corrente, Poupança/Reserva, Cartão de Crédito, Carteira Física e Investimentos.
-- 🏷️ **Categorização Flexível**: Separação clara entre receitas e despesas com identificadores visuais em cores e ícones.
-- 🎯 **Orçamentos Mensais com Alertas**:
-  - Tetos de despesa definidos por categoria/mês.
-  - Indicadores visuais de progresso com alertas automáticos em **80% (Atenção)** e **100% (Estourado)**.
-- 📥 **Exportação de Relatórios**: Download direto das transações filtradas em formato CSV (UTF-8 com pontuação brasileira).
-- 🔒 **Segurança Nativa**: Autenticação por e-mail/senha com Supabase Auth e 100% das tabelas blindadas com políticas RLS (`auth.uid() = user_id`).
+![Contas Bancárias e Carteiras](docs/images/06-contas.png)
+
+- **Diferentes Modalidades Financeiras**: Cadastro de Conta Corrente, Poupança / Reserva de Emergência, Cartão de Crédito, Dinheiro em Espécie e Investimentos.
+- **Controle Individualizado de Saldos**: Exibição clara do saldo disponível em cada instituição financeira ou carteira física.
+- **Identificação Visual**: Cada conta possui uma cor personalizada e um ícone temático correspondente ao seu tipo.
 
 ---
 
-## 🛠️ Stack Tecnológica
+## ✨ Recursos Principais do Sistema
 
-| Camada | Tecnologia | Descrição |
+- 📊 **Visão Geral Consolidada**: Saldos, receitas, despesas e resultado líquido calculados em tempo real.
+- 📈 **Gráficos com Biblioteca Recharts**: Histórico comparativo semestral e distribuição proporcional de gastos por categoria.
+- 💳 **Gestão Descentralizada de Contas**: Múltiplas contas correntes, cartões e reservas de emergência.
+- 🏷️ **Categorização de Transações**: Separação estruturada de despesas e receitas com cores e ícones customizáveis.
+- 🎯 **Monitoramento de Metas Orçamentárias**: Tetos de despesas com aviso visual preventivo em 80% e alerta de estouro em 100%.
+- 📥 **Exportação para Planilhas**: Download de relatórios em formato CSV formatado em UTF-8 compatível com Excel e Google Planilhas.
+- 🔒 **Proteção Total com RLS**: As consultas ao banco utilizam o identificador exclusivo do usuário autenticado no Supabase, impedindo qualquer vazamento de dados.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+| Camada da Aplicação | Tecnologia | Descrição em Português |
 | :--- | :--- | :--- |
-| **Framework** | Next.js 16+ (App Router) | Renderização híbrida (SSR + Server Actions) |
-| **Linguagem** | TypeScript 5+ | Tipagem estrita de ponta a ponta |
-| **Estilização** | Tailwind CSS v4 | Variáveis nativas, Dark Theme & Glassmorphism |
-| **Database & Auth** | Supabase | PostgreSQL gerenciado + Autenticação SSR |
-| **Validação** | Zod | Schemas estritos para dados e mutações |
-| **Visualização** | Recharts | Gráficos responsivos de barras e rosca |
-| **Ícones** | Lucide React | Biblioteca moderna de ícones vetoriais |
+| **Ambiente / Framework** | Next.js 16+ (App Router) | Renderização híbrida no servidor com Ações de Servidor (Server Actions) |
+| **Linguagem de Programação** | TypeScript 5+ | Tipagem forte e estrita de ponta a ponta |
+| **Estilização e Design** | Tailwind CSS v4 | Estilos utilitários nativos, tema escuro e efeitos translúcidos |
+| **Banco de Dados e Auth** | Supabase | PostgreSQL gerenciado com autenticação segura via cookies no servidor |
+| **Validação de Dados** | Zod | Validação robusta de esquemas de formulários no servidor |
+| **Gráficos Interativos** | Recharts | Gráficos modernos de barras e rosca para análise financeira |
+| **Ícones de Interface** | Lucide React | Biblioteca moderna de ícones vetoriais leves |
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura de Pastas do Projeto
 
 ```
 app-orcamento-pessoal/
 ├── docs/
-│   └── images/                             # Capturas de tela e demonstrações visuais
+│   └── images/                             # Imagens e capturas de tela para documentação
 ├── supabase/
 │   ├── migrations/
-│   │   ├── 001_schema_and_rls.sql          # Tabelas, índices e políticas RLS
-│   │   └── 002_triggers_and_defaults.sql   # Trigger para inicialização no cadastro
-│   └── README.md                           # Guia de implantação no Supabase
+│   │   ├── 001_schema_and_rls.sql          # Criação das tabelas e políticas de segurança RLS
+│   │   └── 002_triggers_and_defaults.sql   # Gatilho para criação de dados no cadastro
+│   └── README.md                           # Instruções de configuração do banco no Supabase
 ├── src/
 │   ├── app/
-│   │   ├── (auth)/                         # Rotas públicas de login e registro
-│   │   ├── (dashboard)/                    # Rotas protegidas com layout do painel
-│   │   │   ├── dashboard/page.tsx          # Painel principal analítico
-│   │   │   ├── transactions/page.tsx       # Extrato completo e filtros
-│   │   │   ├── budgets/page.tsx            # Limites e orçamentos mensais
-│   │   │   ├── accounts/page.tsx           # Contas bancárias e carteiras
-│   │   │   ├── categories/page.tsx         # Classificação de categorias
+│   │   ├── (auth)/                         # Páginas públicas de autenticação (Login e Cadastro)
+│   │   ├── (dashboard)/                    # Páginas privadas com menu lateral e cabeçalho
+│   │   │   ├── dashboard/page.tsx          # Painel financeiro principal
+│   │   │   ├── transactions/page.tsx       # Extrato completo com filtros
+│   │   │   ├── budgets/page.tsx            # Gestão de tetos de orçamentos mensais
+│   │   │   ├── accounts/page.tsx           # Gestão de contas bancárias e carteiras
+│   │   │   ├── categories/page.tsx         # Cadastro e lista de categorias
 │   │   │   └── goals/page.tsx              # Metas financeiras de economia
-│   │   ├── api/export-csv/                 # Endpoint de exportação CSV
-│   │   ├── globals.css                     # Design tokens e variáveis de tema
-│   │   └── layout.tsx                      # Layout raiz da aplicação (pt-BR)
+│   │   ├── api/export-csv/                 # Rota interna para download de planilha CSV
+│   │   ├── globals.css                     # Variáveis visuais, tema escuro e estilos globais
+│   │   └── layout.tsx                      # Estrutura raiz configurada para o idioma pt-BR
 │   ├── components/
-│   │   ├── ui/                             # Button, Input, Modal, Card, Badge, Skeleton
-│   │   ├── layout/                         # Sidebar, Topbar, MobileNav
-│   │   ├── dashboard/                      # StatCards, Charts, RecentTransactions
-│   │   ├── transactions/                   # TransactionTable, CreateTransactionModal
-│   │   ├── budgets/                        # BudgetList, CreateBudgetModal
-│   │   └── accounts/                       # AccountList, CreateAccountModal
+│   │   ├── ui/                             # Componentes base: Botão, Campo de Texto, Janela Modal, Cartão
+│   │   ├── layout/                         # Barra Lateral (Sidebar), Topo (Topbar) e Navegação Mobile
+│   │   ├── dashboard/                      # Indicadores numéricos, Gráficos e Listas resumidas
+│   │   ├── transactions/                   # Tabela de lançamentos e formulário de nova transação
+│   │   ├── budgets/                        # Cartões de orçamentos e formulário de limites
+│   │   └── accounts/                       # Cartões de contas e formulário de novas contas
 │   ├── lib/
-│   │   ├── supabase/                       # Clientes Browser, Server e Middleware SSR
-│   │   ├── validations/                    # Schemas de validação Zod
-│   │   ├── actions/                        # Server Actions seguras
-│   │   └── data/finance.ts                 # Camada de agregação de métricas financeiras
+│   │   ├── supabase/                       # Conexões seguras com o Supabase no navegador e servidor
+│   │   ├── validations/                    # Regras de validação de formulários com Zod
+│   │   ├── actions/                        # Ações de servidor para salvar e excluir dados
+│   │   └── data/finance.ts                 # Cálculos de saldos, totais e séries temporais
 │   ├── types/
-│   │   └── database.types.ts               # Tipos TypeScript do modelo de dados
-│   └── middleware.ts                       # Proteção de rotas autenticadas
-├── .env.example                            # Modelo de variáveis de ambiente
-├── .gitignore                              # Regras de exclusão para Git
-├── next.config.ts                          # Configurações do Next.js
-├── package.json                            # Dependências e scripts
-└── tsconfig.json                           # Configuração do TypeScript
+│   │   └── database.types.ts               # Tipos TypeScript do modelo de banco de dados
+│   └── middleware.ts                       # Proteção de rotas e verificação de login
+├── .env.example                            # Modelo público de variáveis de ambiente
+├── .gitignore                              # Regras para ignorar arquivos locais no Git
+├── next.config.ts                          # Configurações do servidor Next.js
+├── package.json                            # Lista de dependências e comandos do projeto
+└── tsconfig.json                           # Configurações do compilador TypeScript
 ```
 
 ---
 
-## 🚀 Instalação e Execução Local
+## 🚀 Instalação e Execução Local Passo a Passo
 
 ### Pré-requisitos
-- Node.js 20+ instalado
-- Gerenciador de pacotes `npm`, `pnpm` ou `yarn`
-- Uma conta ativa no [Supabase](https://supabase.com)
+- **Node.js** na versão 20 ou superior instalado no computador.
+- Gerenciador de pacotes **npm** (incluso com o Node.js).
+- Uma conta gratuita criada na plataforma [Supabase](https://supabase.com).
 
 ### 1. Clonar o Repositório
+Abra o terminal do seu computador e execute:
 ```bash
-git clone https://github.com/seu-usuario/app-orcamento-pessoal.git
+git clone https://github.com/SEU_USUARIO/app-orcamento-pessoal.git
 cd app-orcamento-pessoal
 ```
 
-### 2. Instalar Dependências
+### 2. Instalar as Dependências
+Execute o comando abaixo para baixar as bibliotecas necessárias:
 ```bash
 npm install
 ```
 
-### 3. Configurar Variáveis de Ambiente
-Copie o arquivo de exemplo:
+### 3. Configurar as Variáveis de Ambiente
+Crie o arquivo local de configuração baseado no modelo:
 ```bash
 cp .env.example .env.local
 ```
-Edite `.env.local` informando as credenciais do seu projeto Supabase:
+Abra o arquivo `.env.local` em seu editor e preencha com as credenciais do seu projeto Supabase:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-anon-key-aqui
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-chave-publica-anonima-aqui
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### 4. Executar em Desenvolvimento
+### 4. Iniciar a Aplicação em Modo de Desenvolvimento
+Inicie o servidor local:
 ```bash
 npm run dev
 ```
-Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
+Abra o seu navegador de internet e acesse:
+👉 **[http://localhost:3000](http://localhost:3000)**
 
 ---
 
-## 🗄️ Configuração do Banco de Dados (Supabase)
+## 🗄️ Configuração do Banco de Dados no Supabase
 
-1. Acesse o painel do seu projeto no Supabase.
-2. Navegue até **SQL Editor** > **New Query**.
-3. Execute sequencialmente:
-   - Conteúdo de `supabase/migrations/001_schema_and_rls.sql`
-   - Conteúdo de `supabase/migrations/002_triggers_and_defaults.sql`
-4. Em **Authentication** > **Providers** > **Email**, certifique-se de que o provedor está ativo. *(Dica: em ambiente de testes locais, desmarque "Confirm email" para agilizar os testes de login imediato)*.
+Para preparar as tabelas e regras de segurança no seu projeto Supabase:
+
+1. Acesse o painel do seu projeto no site do [Supabase](https://supabase.com).
+2. No menu lateral esquerdo, clique em **SQL Editor** e depois em **New Query** (Nova Consulta).
+3. Abra e copie todo o conteúdo do arquivo `supabase/migrations/001_schema_and_rls.sql` e clique no botão **Run** (Executar). Esse script cria as tabelas de perfis, contas, categorias, transações e orçamentos, ativando as regras de proteção RLS.
+4. Em seguida, crie outra consulta, copie o conteúdo do arquivo `supabase/migrations/002_triggers_and_defaults.sql` e execute. Esse script ativa a criação automática de categorias e da conta inicial ao realizar novos cadastros.
+5. No menu **Authentication** > **Providers** > **Email**, certifique-se de que a autenticação por e-mail está habilitada. *(Dica: em ambiente de desenvolvimento local, você pode desmarcar a opção "Confirm email" para realizar login imediato sem precisar confirmar o link na caixa de entrada).*
 
 ---
 
-## 🌿 Estratégia de Branches (Git Flow)
+## 🌿 Estratégia de Ramificações no Git (Git Flow)
 
-Adotamos um fluxo baseado em **Git Flow simplificado**, garantindo rastreabilidade, isolamento de código e estabilidade em produção:
+O repositório adota o modelo de fluxo de trabalho baseado no **Git Flow simplificado**, garantindo rastreabilidade, isolamento de novas funcionalidades e segurança no ambiente de produção:
 
 ```
-[main] ──────────────────────────●──────────── (Produção estável)
+[main] ──────────────────────────●──────────── (Versão estável em produção)
                                  ▲
-                                 │ Pull Request
-[develop] ──────●────────────────●────●────── (Homologação / Integração)
+                                 │ Solicitação de Envio (Pull Request)
+[develop] ──────●────────────────●────●────── (Ambiente de integração e testes contínuos)
                 ▲                     ▲
                 │ Pull Request        │ Pull Request
 [feature/*] ────●                     │
 [fix/*] ──────────────────────────────●
 ```
 
-### 1. Branches Principais
-- **`main`**: Reflete o código em produção. **Bloqueada para commits diretos**; alterações só entram via Pull Request aprovado vindo de `develop` ou `hotfix/*`.
-- **`develop`**: Branch de integração contínua. Reúne todas as novas funcionalidades testadas antes da liberação para produção.
+### 1. Ramificações Principais
+- **`main`**: Contém exclusivamente código aprovado e estável em produção. **Protegida contra alterações diretas**; modificações só entram por meio de Solicitações de Envio (Pull Requests) aprovadas após revisão.
+- **`develop`**: Ramificação principal de integração. É onde todas as novas funcionalidades testadas são reunidas antes do lançamento de uma nova versão estável.
 
-### 2. Branches Temporárias de Trabalho
-- **`feature/<nome-da-feature>`**: Novas funcionalidades (ex: `feature/exportacao-pdf`, `feature/grafico-anual`).
-  - Criação: derivada de `develop`.
-  - Merge: volta para `develop` via Pull Request.
-- **`fix/<nome-do-bug>`**: Correções de bugs em ambiente de desenvolvimento (ex: `fix/calculo-saldo-cartao`).
-  - Derivada de `develop` e mesclada em `develop`.
-- **`hotfix/<nome-da-correcao>`**: Correções urgentes diretamente em produção.
-  - Derivada de `main` e mesclada tanto em `main` quanto em `develop`.
+### 2. Ramificações Temporárias de Trabalho
+- **`feature/<nome-da-funcionalidade>`**: Utilizada para desenvolver novas funcionalidades isoladas (exemplo: `feature/exportacao-pdf`, `feature/grafico-anual`). É criada a partir de `develop` e mesclada de volta em `develop`.
+- **`fix/<nome-da-correcao>`**: Utilizada para corrigir falhas encontradas durante os testes na branch `develop`.
+- **`hotfix/<nome-do-ajuste-urgente>`**: Utilizada para correções emergenciais aplicadas diretamente sobre o código em produção. É criada a partir de `main` e mesclada tanto em `main` quanto em `develop`.
 
 ---
 
-## ✍️ Padrão de Commits (Conventional Commits)
+## ✍️ Padrão de Mensagens de Commit (Conventional Commits)
 
-Todas as mensagens de commit devem seguir o padrão [Conventional Commits](https://www.conventionalcommits.org/):
+Todas as mensagens de salvamento de código (commits) devem seguir o padrão internacional [Conventional Commits](https://www.conventionalcommits.org/pt-br/):
 
 ```
-<tipo>(<escopo opcional>): <descrição curta no imperativo>
+<tipo>(<escopo opcional>): <descrição curta em português no modo imperativo>
 
-[corpo detalhado opcional]
+[descrição detalhada das mudanças (opcional)]
 
-[rodapé opcional (ex: Refs #123)]
+[referências a tarefas ou chamados (opcional)]
 ```
 
-### Tipos Permitidos:
-- **`feat`**: Nova funcionalidade para o usuário (ex: `feat(transactions): add filters by date range`).
-- **`fix`**: Correção de bug (ex: `fix(auth): handle email confirmation redirect`).
-- **`docs`**: Alterações exclusivas na documentação (ex: `docs: update setup and git flow guide`).
-- **`style`**: Ajustes de formatação ou estilo sem impacto na lógica (ex: `style(dashboard): improve card border opacity`).
-- **`refactor`**: Refatoração de código sem alterar comportamento (ex: `refactor(finance): optimize balance aggregation query`).
-- **`test`**: Adição ou ajuste de testes (ex: `test(validations): add test cases for transactionSchema`).
-- **`chore`**: Tarefas de manutenção, dependências ou infraestrutura (ex: `chore(deps): update recharts to v2.15`).
+### Tipos de Commits Aceitos:
+- **`feat`**: Adição de uma nova funcionalidade (exemplo: `feat(transacoes): adicionar filtros por periodo de datas`).
+- **`fix`**: Correção de um erro ou comportamento inesperado (exemplo: `fix(auth): corrigir redirecionamento apos cadastro`).
+- **`docs`**: Alterações exclusivas em arquivos de documentação (exemplo: `docs(readme): atualizar guia de telas passo a passo`).
+- **`style`**: Ajustes de formatação visual ou espaçamentos que não alteram a lógica (exemplo: `style(dashboard): ajustar opacidade dos cartoes`).
+- **`refactor`**: Reestruturação interna do código sem alterar suas regras de funcionamento (exemplo: `refactor(financeiro): otimizar calculo de saldo acumulado`).
+- **`test`**: Criação ou ajuste de testes automatizados (exemplo: `test(validacoes): adicionar testes unitarios para esquema de transacoes`).
+- **`chore`**: Tarefas de manutenção de dependências ou configurações de ambiente (exemplo: `chore(deps): atualizar biblioteca recharts`).
 
 ---
 
-## 🛡️ Segurança & Proteção de Dados
+## 🛡️ Segurança e Proteção de Dados
 
-- **Proteção de Segredos**: O arquivo `.gitignore` bloqueia estritamente `.env`, `.env*.local` e quaisquer arquivos de certificados/chaves. Apenas `.env.example` sem valores sensíveis é versionado.
-- **Isolamento RLS**: Nenhuma query acessa dados de outro usuário, pois todas as tabelas contam com políticas de Row Level Security no PostgreSQL do Supabase.
-- **Validação de Entrada**: Toda entrada de formulário é validada no servidor com Zod antes de qualquer inserção ou mutação.
+- **Proteção Total contra Vazamento de Segredos**: O arquivo `.gitignore` bloqueia estritamente `.env`, `.env*.local` e quaisquer chaves privadas. Apenas o modelo demonstrativo `.env.example` sem dados sensíveis é enviado ao repositório público.
+- **Isolamento de Dados por Usuário (RLS)**: O banco de dados do Supabase utiliza a função `auth.uid() = user_id` em todas as tabelas. Mesmo se uma consulta tentar buscar registros de terceiros, o banco de dados bloqueia o acesso no nível do PostgreSQL.
+- **Validação Rigorosa no Servidor**: Todas as informações recebidas em formulários passam por validação estrita com Zod nas Ações de Servidor antes de chegarem ao banco de dados.
 
 ---
 
 ## 📜 Licença
 
-Distribuído sob a licença MIT. Veja `LICENSE` para mais detalhes.
+Este projeto é distribuído sob os termos da licença aberta **MIT**. Consulte o arquivo [LICENSE](LICENSE) para obter mais informações.
