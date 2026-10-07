@@ -31,10 +31,10 @@ O **Orça+** adota a arquitetura moderna do **Next.js App Router** com **Server 
 
 ```mermaid
 graph TD
-    Client([Usuário / Browser]) <-->|HTTPS / Cookies SSR| NextServer[Next.js 16 Server]
-    NextServer -->|Server Components & Actions| SupabaseSSR[@supabase/ssr Auth & RLS]
-    SupabaseSSR <-->|PostgreSQL + Row Level Security| Postgres[(Supabase Database)]
-    NextServer -->|UI Interativa / Charts| UI[Recharts + Tailwind CSS v4]
+    Client([Usuário / Browser]) -- HTTPS / Cookies SSR --> NextServer[Next.js 16 Server]
+    NextServer -- Server Components & Actions --> SupabaseSSR[Supabase SSR Auth e RLS]
+    SupabaseSSR -- PostgreSQL e Row Level Security --> Postgres[(Supabase Database)]
+    NextServer -- UI Interativa e Charts --> UI[Recharts e Tailwind CSS v4]
 ```
 
 ---
