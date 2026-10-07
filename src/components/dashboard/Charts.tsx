@@ -22,7 +22,32 @@ interface ChartsProps {
 }
 
 export function DashboardCharts({ categoryData, monthlyHistory }: ChartsProps) {
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const hasCategoryData = categoryData && categoryData.length > 0;
+
+  if (!isMounted) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="glass-card h-80 flex flex-col justify-between">
+          <CardHeader>
+            <CardTitle>Fluxo dos Últimos 6 Meses</CardTitle>
+          </CardHeader>
+          <div className="h-60 w-full rounded-xl bg-slate-900/40 animate-pulse" />
+        </Card>
+        <Card className="glass-card h-80 flex flex-col justify-between">
+          <CardHeader>
+            <CardTitle>Despesas por Categoria</CardTitle>
+          </CardHeader>
+          <div className="h-60 w-full rounded-xl bg-slate-900/40 animate-pulse" />
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
